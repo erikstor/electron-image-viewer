@@ -1,0 +1,24 @@
+{
+  "name": "electron-image-viwer",
+  "version": "1.0.0",
+  "description": "Aplicativo de electron para visualización de imágenes",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cross-env NODE_ENV=development electron src/index.js",
+    "lint": "standard"
+  },
+  "keywords": [],
+  "author": "Erik Stor <erik.stor.franco@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "devtron": "^1.4.0",
+    "electron-prebuilt-compile": "^8.2.0"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "electron-compile": "^6.4.4",
+    "electron-debug": "^3.2.0",
+    "standard": "^17.0.0"
+  }
+}
