@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 
 import devtools from './devtools'
 
@@ -47,5 +47,7 @@ app.on('ready', () => {
   // win.toggleDevTools()
 })
 
-
-
+ipcMain.on('ping', (event, arg) => {
+  console.log(`se recibio ping - ${arg}`)
+  event.sender.send('pong', new Date())
+})

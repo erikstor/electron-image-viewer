@@ -1,9 +1,14 @@
 import url from 'url'
 import path from 'path'
+import applyFilter from './filters'
+import { setIpc, sendIpc } from './ipcRendererEvents'
 
 window.addEventListener('load', () => {
+  setIpc()
   addImagesEvents()
   searchImageEvent()
+  selectEvent()
+  openDirectory()
 })
 
 function addImagesEvents () {
@@ -25,8 +30,14 @@ function changeImage (node) {
   if (selected) {
     selected.classList.remove('selected')
   }
-  node.classList.add('selected')
-  document.getElementById('image-displayed').src = node.querySelector('img').src
+
+  if (node) {
+    node.classList.add('selected')
+    document.getElementById('image-displayed').src = node.querySelector('img').src
+  } else {
+    document.getElementById('image-displayed').src = ''
+  }
+
 }
 
 function searchImageEvent () {
@@ -66,5 +77,24 @@ function selectFirstImage () {
 
   const image = document.querySelector('li.list-group-item:not(.hidden)')
   changeImage(image)
+
+}
+
+function selectEvent () {
+
+  const select = document.getElementById('filters')
+
+  select.addEventListener('change', function () {
+    applyFilter(this.value, document.getElementById('image-displayed'))
+  })
+
+}
+
+function openDirectory () {
+  const openDirectory = document.getElementById('openDirectory')
+
+  openDirectory.addEventListener('click', function () {
+    sendIpc()
+  })
 
 }
