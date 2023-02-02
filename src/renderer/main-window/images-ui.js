@@ -1,15 +1,5 @@
 import url from 'url'
 import path from 'path'
-import applyFilter from './filters'
-import { setIpc, sendIpc } from './ipcRendererEvents'
-
-window.addEventListener('load', () => {
-  setIpc()
-  addImagesEvents()
-  searchImageEvent()
-  selectEvent()
-  openDirectory()
-})
 
 function addImagesEvents () {
 
@@ -26,6 +16,7 @@ function addImagesEvents () {
 function changeImage (node) {
 
   const selected = document.querySelector('li.selected')
+  document.getElementById('filters').selectedIndex = 0
 
   if (selected) {
     selected.classList.remove('selected')
@@ -33,10 +24,21 @@ function changeImage (node) {
 
   if (node) {
     node.classList.add('selected')
-    document.getElementById('image-displayed').src = node.querySelector('img').src
+    const image = document.getElementById('image-displayed')
+
+    image.src = node.querySelector('img').src
+    image.dataset.original = image.src
+
   } else {
     document.getElementById('image-displayed').src = ''
   }
+
+}
+
+function selectFirstImage () {
+
+  const image = document.querySelector('li.list-group-item:not(.hidden)')
+  changeImage(image)
 
 }
 
@@ -73,28 +75,42 @@ function searchImageEvent () {
   })
 }
 
-function selectFirstImage () {
+function clearImages () {
+  const oldImages = document.querySelectorAll('li.list-group-item')
 
-  const image = document.querySelector('li.list-group-item:not(.hidden)')
-  changeImage(image)
-
-}
-
-function selectEvent () {
-
-  const select = document.getElementById('filters')
-
-  select.addEventListener('change', function () {
-    applyFilter(this.value, document.getElementById('image-displayed'))
-  })
+  for (const oldImage of oldImages) {
+    oldImage.parentNode.removeChild(oldImage)
+  }
 
 }
 
-function openDirectory () {
-  const openDirectory = document.getElementById('openDirectory')
+function loadImages (images) {
 
-  openDirectory.addEventListener('click', function () {
-    sendIpc()
-  })
+  const imagesList = document.querySelector('ul.list-group')
 
+  for (const image of images) {
+    const node = `
+    <li class="list-group-item">
+        <img class="media-object pull-left"
+             src="${image.src}"
+             height="32" alt="">
+        <div class="media-body">
+            <strong>${image.filename}</strong>
+            <p>${image.size}</p>
+        </div>
+    </li>
+  `
+
+    imagesList.insertAdjacentHTML('beforeend', node)
+  }
+
+}
+
+module.exports = {
+  addImagesEvents,
+  changeImage,
+  selectFirstImage,
+  searchImageEvent,
+  clearImages,
+  loadImages
 }
