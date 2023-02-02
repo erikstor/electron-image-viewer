@@ -13,26 +13,8 @@ function setMainIpc (win) {
       title: 'Seleccione la nueva ubicación', buttonLabel: 'Abrir ubicación', properties: ['openDirectory']
     }).then((dir) => {
 
-      const images = []
-
       if (!dir.canceled) {
-
-        fs.readdir(dir.filePaths[0], (err, files) => {
-
-          if (err) throw err
-
-          for (const file of files) {
-            if (isImage(file)) {
-              let imageFile = path.join(dir.filePaths[0], file)
-              let stats = fs.statSync(imageFile)
-              let size = filesize(stats.size, { round: 0 })
-
-              images.push({ filename: file, src: `file:/${imageFile}`, size })
-            }
-
-            event.sender.send('load-images', images)
-          }
-        })
+        loadImages(event, dir)
       }
 
     })
@@ -67,6 +49,31 @@ function setMainIpc (win) {
         }
       })
 
+  })
+
+  ipcMain.on('load-directory', (event, dir) => {
+    loadImages(event, dir)
+  })
+
+}
+
+function loadImages (event, dir) {
+  const images = []
+  fs.readdir(dir.filePaths[0], (err, files) => {
+
+    if (err) throw err
+
+    for (const file of files) {
+      if (isImage(file)) {
+        let imageFile = path.join(dir.filePaths[0], file)
+        let stats = fs.statSync(imageFile)
+        let size = filesize(stats.size, { round: 0 })
+
+        images.push({ filename: file, src: `file:/${imageFile}`, size })
+      }
+
+      event.sender.send('load-images', dir, images)
+    }
   })
 
 }
