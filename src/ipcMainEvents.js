@@ -69,7 +69,7 @@ function loadImages (event, dir) {
         let stats = fs.statSync(imageFile)
         let size = filesize(stats.size, { round: 0 })
 
-        images.push({ filename: file, src: `file:/${imageFile}`, size })
+        images.push({ filename: file, src: `${imageFile}`, size })
       }
 
       event.sender.send('load-images', dir, images)

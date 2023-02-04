@@ -90,7 +90,7 @@ function uploadImage () {
     image = imageNode.src
   }
 
-  image = image.replace('file://', '')
+  image = image.replace('ep://', '')
   let fileName = path.basename(image)
 
   if (settings.has('cloudup.user') && settings.has('cloudup.pwd')) {

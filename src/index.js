@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, Tray } from 'electron'
+import { app, BrowserWindow, Tray, globalShortcut, protocol } from 'electron'
 import os from 'os'
 import path from 'path'
 
@@ -11,7 +11,7 @@ import { setMainIpc } from './ipcMainEvents'
 
 if (process.env.NODE_ENV === 'development') {
   console.log('devtools')
-  // devtools()
+  devtools()
 }
 
 global.win
@@ -22,6 +22,15 @@ app.on('before-quit', () => {
 })
 
 app.on('ready', () => {
+
+  protocol.registerFileProtocol('ep', (request, callback) => {
+    const filePath = url.fileURLToPath('file://' + request.url.slice('ep://'.length))
+    console.log(filePath)
+    callback(filePath)
+  }, error => {
+    if (error) throw error
+  })
+
   global.win = new BrowserWindow({
     width: 800, height: 600, title: 'Hola mundo', center: true, // maximizable: false,
     maximizable: true, show: false, border: false, webPreferences: {
