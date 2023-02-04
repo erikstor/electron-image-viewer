@@ -1,6 +1,6 @@
 import { applyFilter } from './main-window/filters'
-import { setIpc, openDirectory, saveFile, openPreferences } from './main-window/ipcRendererEvents'
-import { addImagesEvents, searchImageEvent, selectFirstImage } from './main-window/images-ui'
+import { setIpc, openDirectory, saveFile, openPreferences, uploadImage, pasteImage } from './main-window/ipcRendererEvents'
+import { addImagesEvents, searchImageEvent, selectFirstImage, print } from './main-window/images-ui'
 
 window.addEventListener('load', () => {
   setIpc()
@@ -10,6 +10,9 @@ window.addEventListener('load', () => {
   buttonEvent('openDirectory', openDirectory)
   buttonEvent('saveButton', saveFile)
   buttonEvent('preferences', openPreferences)
+  buttonEvent('print-button', print)
+  buttonEvent('upload-button', uploadImage)
+  buttonEvent('paste-button', pasteImage)
 
   selectFirstImage()
 })

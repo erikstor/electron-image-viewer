@@ -106,11 +106,16 @@ function loadImages (images) {
 
 }
 
+function print () {
+  window.print()
+}
+
 module.exports = {
   addImagesEvents,
   changeImage,
   selectFirstImage,
   searchImageEvent,
   clearImages,
-  loadImages
+  loadImages,
+  print
 }

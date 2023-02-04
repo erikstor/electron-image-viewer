@@ -1,6 +1,8 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Tray } from 'electron'
+import os from 'os'
+import path from 'path'
 
 import devtools from './devtools'
 
@@ -13,6 +15,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 global.win
+global.tray
 
 app.on('before-quit', () => {
   console.log('before-quit')
@@ -43,6 +46,22 @@ app.on('ready', () => {
   global.win.once('ready-to-show', () => {
     global.win.show()
   })
+
+  let icon
+  if (os.platform() !== 'win32') {
+    icon = path.join(__dirname, 'assets', 'icons', 'tray-icon.png')
+  } else {
+    icon = path.join(__dirname, 'assets', 'icons', 'tray-icon.ico')
+  }
+
+  console.log(icon)
+
+  global.tray = new Tray(icon)
+  global.tray.setToolTip('Electron viewer images')
+  global.tray.on('click', () => {
+      global.win.isVisible() ? global.win.hide() : global.win.show()
+    }
+  )
 
   // global.win.loadURL('https://devdocs.io/')
   global.win.loadFile(`${__dirname}/renderer/index.html`).then()
