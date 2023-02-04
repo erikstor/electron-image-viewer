@@ -1,8 +1,10 @@
 import { applyFilter } from './main-window/filters'
 import { setIpc, openDirectory, saveFile, openPreferences, uploadImage, pasteImage } from './main-window/ipcRendererEvents'
 import { addImagesEvents, searchImageEvent, selectFirstImage, print } from './main-window/images-ui'
+import { createMenu } from './main-window/menu'
 
 window.addEventListener('load', () => {
+  createMenu()
   setIpc()
   addImagesEvents()
   searchImageEvent()
@@ -15,6 +17,7 @@ window.addEventListener('load', () => {
   buttonEvent('paste-button', pasteImage)
 
   selectFirstImage()
+
 })
 
 function selectEvent () {
