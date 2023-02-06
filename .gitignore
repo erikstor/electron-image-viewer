@@ -106,3 +106,5 @@ dist
 .idea
 
 src/assets/img
+
+out/
